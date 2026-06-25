@@ -129,6 +129,9 @@
         async function generateContent() {
             const guion = document.getElementById('guion').value.trim();
             if (!guion) { alert('Pegá un guion'); return; }
+            const tipo = document.querySelector('input[name="option"]:checked').value;
+            const generar = Array.from(document.querySelectorAll('input[name="generate"]:checked')).map(x => x.value);
+            if (generar.length === 0) { alert('Elegí qué generar'); return; }
             const output = document.getElementById('output');
             output.style.display = 'block';
             document.getElementById('output-content').innerHTML = '<div class="loading">Generando...</div>';
@@ -136,7 +139,7 @@
                 const res = await fetch('/api/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ guion, tipo: 'multiple', dificultad: selectedDifficulty })
+                    body: JSON.stringify({ guion, tipo, generar: generar.join(', '), dificultad: selectedDifficulty })
                 });
                 const data = await res.json();
                 document.getElementById('output-content').innerHTML = data.content || `<div class="info-box">Error: ${data.error}</div>`;

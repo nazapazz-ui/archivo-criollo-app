@@ -15,20 +15,28 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { guion, tipo, dificultad, notas } = req.body;
+    const { guion, tipo, generar, dificultad, notas } = req.body;
 
     const client = new Anthropic({
       apiKey: process.env.ANTHROPIC_API_KEY,
     });
 
-    const prompt = `Eres un experto en crear scripts virales para TikTok. Tu tarea es convertir este guion en videos cortos con hooks pegadizos.
+    const prompt = `Eres un experto en crear scripts virales para TikTok e Instagram. Tu tarea es convertir este guion en contenido específico.
 
 GUION:
 ${guion}
 
+QUÉ GENERAR: ${generar}
 Tipo de contenido: ${tipo}
 Dificultad de edición: ${dificultad}
 ${notas ? `Notas especiales: ${notas}` : ""}
+
+IMPORTANTE:
+- Si pide "1video": GENERA 1 video corto (15-45 seg)
+- Si pide "3": GENERA 3 videos variados (diferentes duraciones y ángulos)
+- Si pide "5": GENERA 5 videos completos
+- Si pide "carrusel": GENERA estructura para carrusel Instagram (5-8 slides)
+- Si pide "todo": GENERA 5 videos + carrusel + checklist
 
 DEVUELVE HTML formateado (sin <!DOCTYPE>, sin <html>, sin <head>, solo <body>). Estructura de cada video:
 
