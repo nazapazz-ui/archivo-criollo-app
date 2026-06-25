@@ -1,0 +1,6 @@
+{
+  "buildCommand": "npm install",
+  "env": {
+    "ANTHROPIC_API_KEY": "@ANTHROPIC_API_KEY"
+  }
+}
