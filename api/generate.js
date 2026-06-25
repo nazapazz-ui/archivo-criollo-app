@@ -43,7 +43,7 @@ EDICION (anotaciones):
 Sin iconos, solo texto limpio. Branding Archivo Criollo.`;
 
     const message = await client.messages.create({
-      model: "claude-3-sonnet-20240229",
+      model: "claude-opus-4-8",
       max_tokens: 2000,
       messages: [
         {
