@@ -78,16 +78,13 @@ DEVUELVE HTML formateado (sin <!DOCTYPE>, sin <html>, sin <head>, solo <body>). 
   </div>
 </div>
 
-Genera 3-5 videos seguidos (sin repetir estructura, variar en duración y complejidad).
-Hooks deben ser CORTOS, directos, inquietantes.
-Textos en diálogos: naturales, conversacionales, con datos duros.
-Anotaciones: específicas (nombre de efectos CapCut, tipos de zoom, música descriptiva).
-Branding: menciona "Archivo Criollo" al final de algunos videos.
-Sin iconos de emojis en los titulos, solo en etiquetas de sección.`;
+Sé CONCISO. Hooks cortos (máx 10 palabras). Diálogos naturales, datos duros. Anotaciones directas, sin descripciones largas.
+Para carrusels: 5-8 slides máximo, cada uno con título + texto + diseño. No escribas párrafos largos.
+Incluye logo "Archivo Criollo" en último video/slide. Sin emojis en títulos.`;
 
     const message = await client.messages.create({
       model: "claude-sonnet-4-6",
-      max_tokens: 3000,
+      max_tokens: 3500,
       messages: [
         {
           role: "user",
