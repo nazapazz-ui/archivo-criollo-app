@@ -86,8 +86,8 @@ Branding: menciona "Archivo Criollo" al final de algunos videos.
 Sin iconos de emojis en los titulos, solo en etiquetas de sección.`;
 
     const message = await client.messages.create({
-      model: "claude-opus-4-8",
-      max_tokens: 4000,
+      model: "claude-sonnet-4-6",
+      max_tokens: 3000,
       messages: [
         {
           role: "user",
