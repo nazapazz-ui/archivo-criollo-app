@@ -21,26 +21,61 @@ export default async function handler(req, res) {
       apiKey: process.env.ANTHROPIC_API_KEY,
     });
 
-    const prompt = `Eres experto en crear contenido viral para TikTok e Instagram. Tono: conversacional, datos duros, hooks fuertes.
+    const prompt = `Eres un experto en crear scripts virales para TikTok. Tu tarea es convertir este guion en videos cortos con hooks pegadizos.
 
 GUION:
 ${guion}
 
-Tipo: ${tipo}
-Dificultad: ${dificultad}
-${notas ? `Notas: ${notas}` : ""}
+Tipo de contenido: ${tipo}
+Dificultad de edición: ${dificultad}
+${notas ? `Notas especiales: ${notas}` : ""}
 
-Genera en formato doble columna:
+DEVUELVE HTML formateado (sin <!DOCTYPE>, sin <html>, sin <head>, solo <body>). Estructura de cada video:
 
-[TITULO]
+<div class="video-card">
+  <h2>📱 VIDEO [N]: "[TITULO]"</h2>
+  <div class="video-meta">
+    <div class="meta-item"><strong>⏱</strong> [DURACION] segundos</div>
+    <div class="meta-item"><strong>📐</strong> Vertical (9:16)</div>
+    <div class="meta-item"><strong>⭐</strong> <span class="difficulty ${dificultad.toLowerCase()}">${dificultad}</span></div>
+  </div>
+  <div class="hook-box">💭 <strong>HOOK:</strong> "[TEXTO ATRAPADOR CORTO]"</div>
+  <div class="script-container">
+    <div class="script-column">
+      <h3>📝 Lo que hablas (GUION)</h3>
+      <div class="script-segment">
+        <span class="timecode">[TIMECODE]</span>
+        <span class="dialog">"[TEXTO DEL DIALOGO]"</span>
+      </div>
+      [REPETIR PARA CADA SEGMENTO]
+    </div>
+    <div class="script-column">
+      <h3>🎨 Anotaciones de edición</h3>
+      <div class="annotation-segment">
+        <span class="timecode">[TIMECODE]</span>
+        <ul class="annotation-list">
+          <li>[ANOTACION 1]</li>
+          <li>[ANOTACION 2]</li>
+        </ul>
+      </div>
+      [REPETIR PARA CADA SEGMENTO]
+    </div>
+  </div>
+  <div class="instruction-box">
+    <h4>🎯 Checklist de edición en CapCut:</h4>
+    <ol>
+      <li>[PASO 1]</li>
+      <li>[PASO 2]</li>
+    </ol>
+  </div>
+</div>
 
-GUION (lo que habla):
-[timecode] [dialog]
-
-EDICION (anotaciones):
-[timecode] [imagen], [texto], [efecto], [música]
-
-Sin iconos, solo texto limpio. Branding Archivo Criollo.`;
+Genera 3-5 videos seguidos (sin repetir estructura, variar en duración y complejidad).
+Hooks deben ser CORTOS, directos, inquietantes.
+Textos en diálogos: naturales, conversacionales, con datos duros.
+Anotaciones: específicas (nombre de efectos CapCut, tipos de zoom, música descriptiva).
+Branding: menciona "Archivo Criollo" al final de algunos videos.
+Sin iconos de emojis en los titulos, solo en etiquetas de sección.`;
 
     const message = await client.messages.create({
       model: "claude-opus-4-8",
