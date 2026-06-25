@@ -26,7 +26,10 @@
         .difficulty-btn { padding: 12px; border: 2px solid #e0e0e0; background: white; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; text-transform: uppercase; }
         .difficulty-btn.active { background: #2E5090; color: white; border-color: #2E5090; }
         .generate-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #2E5090 0%, #1e3a5f 100%); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 24px; }
-        .output-section { background: #ffffff !important; border-radius: 16px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); max-height: 90vh; overflow-y: auto; color: #1a1a1a; }
+        #output-content { background: #ffffff !important; }
+        #output-content * { background: transparent !important; }
+        #output-content .video-card { background: white !important; }
+        .output-section { background: #ffffff !important; border-radius: 16px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); max-height: 90vh; overflow-y: auto; color: #1a1a1a !important; }
         .hidden { display: none; }
         .loading { text-align: center; padding: 40px; }
         .output-content { background: #f9f9f9; padding: 20px; border-radius: 12px; word-wrap: break-word; font-size: 13px; border-left: 4px solid #2E5090; }
@@ -128,7 +131,8 @@
         });
         async function generateContent() {
             const guion = document.getElementById('guion').value.trim();
-            if (!guion) { alert('Pegá un guion'); return; }
+            const efemeride = document.getElementById('efemeride').value.trim();
+            if (!guion && !efemeride) { alert('Pegá un guion o efeméride'); return; }
             const tipo = document.querySelector('input[name="option"]:checked').value;
             const generar = Array.from(document.querySelectorAll('input[name="generate"]:checked')).map(x => x.value);
             if (generar.length === 0) { alert('Elegí qué generar'); return; }
@@ -139,7 +143,7 @@
                 const res = await fetch('/api/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ guion, tipo, generar: generar.join(', '), dificultad: selectedDifficulty })
+                    body: JSON.stringify({ guion, efemeride, tipo, generar: generar.join(', '), dificultad: selectedDifficulty })
                 });
                 const data = await res.json();
                 document.getElementById('output-content').innerHTML = data.content || `<div class="info-box">Error: ${data.error}</div>`;

@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { guion, tipo, generar, dificultad, notas } = req.body;
+    const { guion, tipo, generar, dificultad, notas, efemeride } = req.body;
 
     const client = new Anthropic({
       apiKey: process.env.ANTHROPIC_API_KEY,
@@ -25,6 +25,11 @@ export default async function handler(req, res) {
 
 GUION:
 ${guion}
+
+${efemeride ? `EFEMÉRIDE/NOTICIA A CONECTAR:
+${efemeride}
+
+INSTRUCCIÓN: Mezcla el guion con esta noticia. Crea contenido que combine ambos, haciendo que la efeméride sea relevante a la historia del guion.` : ""}
 
 QUÉ GENERAR: ${generar}
 Tipo de contenido: ${tipo}
