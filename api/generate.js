@@ -29,7 +29,12 @@ ${guion}
 ${efemeride ? `EFEMÉRIDE/NOTICIA A CONECTAR:
 ${efemeride}
 
-INSTRUCCIÓN: Mezcla el guion con esta noticia. Crea contenido que combine ambos, haciendo que la efeméride sea relevante a la historia del guion.` : ""}
+INSTRUCCIÓN: NO solo relaciona superficialmente. MEZCLA y COMBINA:
+- Busca paralelos entre la historia del guion y la noticia/efeméride
+- Agrega contexto histórico, datos, fechas que enriquezcan ambas
+- Crea puentes narrativos que conecten pasado (guion) con presente (efeméride)
+- Genera contenido donde el guion ilumina la noticia y viceversa
+Ejemplo: si el guion habla de un personaje histórico y la noticia menciona su legado hoy, combínalos.` : ""}
 
 QUÉ GENERAR: ${generar}
 Tipo de contenido: ${tipo}

@@ -7,7 +7,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: linear-gradient(135deg, #f8f9fa 0%, #e8eef8 100%); color: #1a1a1a; min-height: 100vh; }
-        .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        .container { width: 100%; margin: 0; padding: 24px; }
         .header { background: linear-gradient(135deg, #2E5090 0%, #1e3a5f 100%); color: white; padding: 40px; border-radius: 16px; margin-bottom: 32px; text-align: center; }
         .header h1 { font-size: 32px; margin-bottom: 8px; font-weight: 700; }
         .header p { font-size: 15px; opacity: 0.95; }
@@ -28,6 +28,9 @@
         .generate-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #2E5090 0%, #1e3a5f 100%); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 24px; }
         #output-content { background: #ffffff !important; padding: 0 !important; }
         #output-content * { background: transparent !important; }
+        #output-content [style*="background: #2E5090"], #output-content [style*="background-color: #2E5090"],
+        #output-content [style*="background: #000"], #output-content [style*="background-color: #000"],
+        #output-content div[style*="#2E5090"], #output-content div[style*="#000"] { color: white !important; }
         .output-section { background: #ffffff !important; border-radius: 16px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); max-height: 90vh; overflow-y: auto; color: #1a1a1a !important; }
         .hidden { display: none; }
         .loading { text-align: center; padding: 40px; }
