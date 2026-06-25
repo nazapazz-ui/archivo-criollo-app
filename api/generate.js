@@ -43,42 +43,38 @@ IMPORTANTE:
 - Si pide "carrusel": GENERA estructura para carrusel Instagram (5-8 slides)
 - Si pide "todo": GENERA 5 videos + carrusel + checklist
 
-DEVUELVE HTML formateado (sin <!DOCTYPE>, sin <html>, sin <head>, solo <body>). Estructura de cada video:
+DEVUELVE HTML MINIMALISTA (sin <!DOCTYPE>, sin <html>, sin <head>, solo <body>):
 
 <div class="video-card">
-  <h2>📱 VIDEO [N]: "[TITULO]"</h2>
+  <h2>VIDEO [N]: "[TITULO]"</h2>
   <div class="video-meta">
-    <div class="meta-item"><strong>⏱</strong> [DURACION] segundos</div>
-    <div class="meta-item"><strong>📐</strong> Vertical (9:16)</div>
-    <div class="meta-item"><strong>⭐</strong> <span class="difficulty ${dificultad.toLowerCase()}">${dificultad}</span></div>
+    <div class="meta-item"><strong>⏱</strong> [DURACION] seg</div>
+    <div class="meta-item"><strong>Formato:</strong> Vertical (9:16)</div>
+    <div class="meta-item"><span class="difficulty ${dificultad.toLowerCase()}">${dificultad}</span></div>
   </div>
-  <div class="hook-box">💭 <strong>HOOK:</strong> "[TEXTO ATRAPADOR CORTO]"</div>
+  <div class="hook-box"><strong>HOOK:</strong> "[TEXTO CORTO]"</div>
   <div class="script-container">
     <div class="script-column">
-      <h3>📝 Lo que hablas (GUION)</h3>
+      <h3>Lo que hablas</h3>
       <div class="script-segment">
         <span class="timecode">[TIMECODE]</span>
-        <span class="dialog">"[TEXTO DEL DIALOGO]"</span>
+        <span class="dialog">"[DIALOGO]"</span>
       </div>
-      [REPETIR PARA CADA SEGMENTO]
     </div>
     <div class="script-column">
-      <h3>🎨 Anotaciones de edición</h3>
+      <h3>Anotaciones de edición</h3>
       <div class="annotation-segment">
         <span class="timecode">[TIMECODE]</span>
         <ul class="annotation-list">
-          <li>[ANOTACION 1]</li>
-          <li>[ANOTACION 2]</li>
+          <li>[Anotación]</li>
         </ul>
       </div>
-      [REPETIR PARA CADA SEGMENTO]
     </div>
   </div>
   <div class="instruction-box">
-    <h4>🎯 Checklist de edición en CapCut:</h4>
+    <h4>Checklist:</h4>
     <ol>
-      <li>[PASO 1]</li>
-      <li>[PASO 2]</li>
+      <li>[Paso]</li>
     </ol>
   </div>
 </div>
