@@ -85,7 +85,14 @@ DEVUELVE HTML formateado (sin <!DOCTYPE>, sin <html>, sin <head>, solo <body>). 
 
 Sé CONCISO. Hooks cortos (máx 10 palabras). Diálogos naturales, datos duros. Anotaciones directas, sin descripciones largas.
 Para carrusels: 5-8 slides máximo, cada uno con título + texto + diseño. No escribas párrafos largos.
-Incluye logo "Archivo Criollo" en último video/slide. Sin emojis en títulos.`;
+Incluye logo "Archivo Criollo" en último video/slide. Sin emojis en títulos.
+
+COLORES: USA SOLO la paleta Archivo Criollo:
+- Azul principal: #2E5090
+- Amarillo: #FFC107
+- Negro: #000000
+- Blanco: #ffffff (fondo)
+NO uses otros colores, tonos grises, ni variaciones. Solo estos 4.`;
 
     const message = await client.messages.create({
       model: "claude-sonnet-4-6",
