@@ -1,159 +1,204 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Archivo Criollo - Generador de Contenido</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: linear-gradient(135deg, #f8f9fa 0%, #e8eef8 100%); color: #1a1a1a; min-height: 100vh; }
-        .container { width: 100%; margin: 0; padding: 24px; }
-        .header { background: linear-gradient(135deg, #2E5090 0%, #1e3a5f 100%); color: white; padding: 40px; border-radius: 16px; margin-bottom: 32px; text-align: center; }
-        .header h1 { font-size: 32px; margin-bottom: 8px; font-weight: 700; }
-        .header p { font-size: 15px; opacity: 0.95; }
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 32px; }
-        .form-section { background: white; border-radius: 16px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-        .form-section h2 { color: #2E5090; font-size: 20px; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #2E5090; }
-        .form-group { margin-bottom: 24px; }
-        .form-group label { display: block; font-weight: 600; color: #333; margin-bottom: 8px; font-size: 13px; text-transform: uppercase; }
-        .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 12px; }
-        .radio-option, .checkbox-option { display: flex; align-items: center; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; }
-        .radio-option:hover, .checkbox-option:hover { background: #f5f5f5; border-color: #2E5090; }
-        textarea, input[type="text"] { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 13px; }
-        textarea:focus, input:focus { outline: none; border-color: #2E5090; }
-        textarea { min-height: 120px; resize: vertical; }
-        .difficulty-select { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .difficulty-btn { padding: 12px; border: 2px solid #e0e0e0; background: white; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; text-transform: uppercase; }
-        .difficulty-btn.active { background: #2E5090; color: white; border-color: #2E5090; }
-        .generate-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #2E5090 0%, #1e3a5f 100%); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 24px; }
-        #output-content { background: #ffffff !important; padding: 0 !important; }
-        #output-content * { background: transparent !important; }
-        #output-content [style*="background: #2E5090"], #output-content [style*="background-color: #2E5090"],
-        #output-content [style*="background: #000"], #output-content [style*="background-color: #000"],
-        #output-content div[style*="#2E5090"], #output-content div[style*="#000"] { color: white !important; }
-        .output-section { background: #ffffff !important; border-radius: 16px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); max-height: 90vh; overflow-y: auto; color: #1a1a1a !important; }
-        .hidden { display: none; }
-        .loading { text-align: center; padding: 40px; }
-        .output-content { background: #f9f9f9; padding: 20px; border-radius: 12px; word-wrap: break-word; font-size: 13px; border-left: 4px solid #2E5090; }
-        .video-card { background: transparent; border-bottom: 2px solid #2E5090; padding: 32px 0; margin-bottom: 32px; }
-        .video-card h2 { color: #2E5090; margin-bottom: 16px; font-size: 20px; font-weight: 700; }
-        .video-meta { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; font-size: 13px; color: #666; }
-        .meta-item { display: flex; gap: 8px; }
-        .meta-item strong { color: #2E5090; }
-        .hook-box { padding: 16px 0; margin-bottom: 24px; font-size: 15px; color: #333; border-left: 3px solid #FFC107; padding-left: 16px; }
-        .hook-box strong { color: #2E5090; }
-        .script-container { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 32px; }
-        .script-column { display: flex; flex-direction: column; gap: 20px; }
-        .script-column h3 { font-size: 13px; font-weight: 600; color: #2E5090; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 12px; border-bottom: 1px solid #2E5090; }
-        .script-segment { background: transparent; padding: 16px 0; border-left: 2px solid #2E5090; padding-left: 16px; }
-        .script-segment .timecode { font-size: 12px; font-weight: 600; color: #2E5090; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: block; }
-        .script-segment .dialog { font-size: 14px; line-height: 1.6; color: #333; font-weight: 500; }
-        .annotation-segment { background: transparent; padding: 16px 0; border-left: 2px solid #FFC107; padding-left: 16px; margin-bottom: 16px; }
-        .annotation-segment .timecode { font-size: 12px; font-weight: 600; color: #FFC107; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: block; }
-        .annotation-list { font-size: 13px; line-height: 1.6; color: #333; list-style: none; padding: 0; }
-        .annotation-list li { margin-bottom: 8px; padding-left: 16px; position: relative; }
-        .annotation-list li::before { content: '−'; position: absolute; left: 0; color: #FFC107; font-weight: bold; }
-        .instruction-box { background: transparent; padding: 20px 0; border-top: 1px solid #2E5090; margin-top: 24px; font-size: 13px; line-height: 1.6; }
-        .instruction-box h4 { color: #2E5090; margin-bottom: 12px; font-size: 14px; font-weight: 600; }
-        .instruction-box ol { padding-left: 20px; }
-        .instruction-box li { margin-bottom: 8px; color: #333; }
-        .difficulty { display: inline-block; background: transparent; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; color: #2E5090; border: 1px solid #2E5090; }
-        .difficulty.baja { color: #155724; border-color: #155724; }
-        .difficulty.media { color: #856404; border-color: #856404; }
-        .difficulty.alta { color: #721c24; border-color: #721c24; }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generador de Contenido — Archivo Criollo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62.5..125,300..900;1,62.5..125,400..700&family=Archivo+Black&family=Piazzolla:ital,opsz,wght@0,8..30,400..800&family=Space+Mono:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --azul-50:#eef5fc; --azul-100:#d9e9f9; --azul-600:#1060b0; --azul-700:#0f5499; --azul-800:#0c4787;
+  --sol-200:#f8e0aa; --sol-400:#f0bb5a; --sol-500:#e6a128; --sol-600:#c98318; --sol-700:#a96f12;
+  --tinta-900:#07182a; --tinta-800:#0c2236;
+  --pergamino:#f6f0df; --pergamino-2:#efe7cf; --papel:#fbf8ef; --blanco:#fdfcf6;
+  --crema-700:#b8ad72; --neutral-200:#ddd9c6; --neutral-500:#6c7984;
+  --verde:#2f7d57; --verde-soft:#b4d6c4; --bermellon:#c0432b;
+  --hairline:rgba(12,34,54,0.12);
+  --font-display:'Archivo','Archivo Black',system-ui,sans-serif;
+  --font-sans:'Archivo',system-ui,sans-serif;
+  --font-serif:'Piazzolla',Georgia,serif;
+  --font-mono:'Space Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--pergamino); color:var(--tinta-800);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;}
+.wrap{max-width:100%;margin:0 auto;padding:20px 22px 80px;}
+.head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 0 20px;margin-bottom:22px;border-bottom:2px solid var(--tinta-800);}
+.head-l{display:flex;align-items:center;gap:14px;}
+.logo{width:54px;height:54px;object-fit:contain;}
+.brand-kicker{font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--azul-600);font-weight:700;}
+.brand-h1{margin:3px 0 0;font-family:var(--font-display);font-weight:900;font-size:27px;line-height:.98;color:var(--tinta-900);text-transform:uppercase;}
+.beta{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;font-weight:700;padding:5px 10px;border-radius:999px;border:1.5px solid var(--sol-600);color:var(--sol-700);background:var(--sol-200);}
+.layout{display:grid;grid-template-columns:1fr;gap:24px;align-items:start;}
+@media(min-width:920px){.layout{grid-template-columns:minmax(360px,412px) 1fr;}.form-col{position:sticky;top:20px;}}
+.form-col{background:var(--papel);border:1.5px solid var(--hairline);border-radius:16px;padding:24px;}
+.form-title{font-family:var(--font-display);font-weight:900;font-size:18px;margin:0 0 20px;color:var(--tinta-900);text-transform:uppercase;}
+.form-group{margin-bottom:24px;}
+.form-label{display:block;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--azul-600);margin-bottom:12px;}
+.radio-group{display:flex;gap:12px;flex-wrap:wrap;}
+.radio-btn,.checkbox-btn{flex:1;min-width:120px;padding:12px;border:2px solid var(--hairline);border-radius:8px;background:var(--blanco);cursor:pointer;font-family:var(--font-sans);font-size:13px;font-weight:600;text-transform:uppercase;transition:all .2s ease;text-align:center;}
+.radio-btn:hover,.checkbox-btn:hover{border-color:var(--azul-600);background:var(--azul-50);}
+.radio-btn.active,.checkbox-btn.active{background:var(--azul-600);color:white;border-color:var(--azul-600);}
+textarea,input[type="text"]{width:100%;padding:12px;border:2px solid var(--hairline);border-radius:8px;font-family:var(--font-sans);font-size:13px;color:var(--tinta-900);background:var(--blanco);}
+textarea:focus,input[type="text"]:focus{outline:none;border-color:var(--azul-600);box-shadow:0 0 0 3px var(--azul-50);}
+textarea{min-height:120px;resize:vertical;}
+.difficulty-select{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
+.diff-btn{padding:12px;border:2px solid var(--hairline);background:var(--blanco);border-radius:8px;cursor:pointer;font-weight:600;font-size:13px;text-transform:uppercase;transition:all .2s;}
+.diff-btn:hover{border-color:var(--azul-600);}
+.diff-btn.active{background:var(--azul-600);color:white;border-color:var(--azul-600);}
+.submit-btn{width:100%;padding:16px;background:var(--azul-600);color:white;border:none;border-radius:8px;font-weight:700;font-size:14px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.submit-btn:hover{background:var(--azul-700);}
+.result-col{background:var(--papel);border:1.5px solid var(--hairline);border-radius:16px;padding:24px;min-height:400px;}
+.result-title{font-family:var(--font-display);font-weight:900;font-size:18px;margin:0 0 20px;color:var(--tinta-900);text-transform:uppercase;}
+.result-content{max-height:80vh;overflow-y:auto;}
+.loading{text-align:center;padding:40px 20px;color:var(--neutral-500);}
+.spinner{display:inline-block;width:40px;height:40px;border:3px solid var(--hairline);border-top-color:var(--azul-600);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.hidden{display:none;}
+#output-content{background:transparent;}
+#output-content *{background:transparent !important;}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div style="font-size: 48px; margin-bottom: 12px;">AC</div>
-            <h1>Generador de Contenido</h1>
-            <p>Archivo Criollo - Crea TikToks, Reels e Instagram desde tu guion</p>
-        </div>
+<div class="wrap">
+  <div class="head">
+    <div class="head-l">
+      <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100" height="100" fill="#1060b0" rx="12"/>
+        <text x="50" y="65" font-size="60" font-weight="900" text-anchor="middle" fill="white" font-family="Arial">AC</text>
+      </svg>
+      <div>
+        <div class="brand-kicker">Archivo Criollo</div>
+        <h1 class="brand-h1">Generador</h1>
+      </div>
+    </div>
+    <div class="beta">Estudio</div>
+  </div>
 
-        <div class="main-grid">
-            <div class="form-section">
-                <h2>Inputs</h2>
-                <div class="form-group">
-                    <label>Qué querés hacer</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="option" value="guion" checked> Solo guion</label>
-                        <label><input type="radio" name="option" value="efemeride"> Solo efeméride/noticia</label>
-                        <label><input type="radio" name="option" value="mixto"> Guion + efeméride</label>
-                    </div>
-                </div>
-                <div class="form-group" id="guion-field">
-                    <label>Guion</label>
-                    <textarea id="guion" placeholder="Pega aquí el guion..."></textarea>
-                </div>
-                <div class="form-group hidden" id="efemeride-field">
-                    <label>Efeméride o noticia</label>
-                    <input type="text" id="efemeride" placeholder="Ej: Murió el Indio Solari...">
-                </div>
-                <div class="form-group">
-                    <label>Qué querés generar</label>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="generate" value="1video" checked> 1 TikTok/Reel</label>
-                        <label><input type="checkbox" name="generate" value="3"> 3 TikToks variados</label>
-                        <label><input type="checkbox" name="generate" value="5"> 5 TikToks completos</label>
-                        <label><input type="checkbox" name="generate" value="carrusel"> Carrusel Instagram</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Dificultad</label>
-                    <div class="difficulty-select">
-                        <button class="difficulty-btn" data-difficulty="baja">Baja</button>
-                        <button class="difficulty-btn active" data-difficulty="media">Media</button>
-                        <button class="difficulty-btn" data-difficulty="alta">Alta</button>
-                    </div>
-                </div>
-                <button class="generate-btn" onclick="generateContent()">Generar contenido</button>
-            </div>
+  <div class="layout">
+    <!-- FORM -->
+    <div class="form-col">
+      <h2 class="form-title">Inputs</h2>
 
-            <div class="output-section" id="output" style="display: none;">
-                <h2>Contenido Generado</h2>
-                <div id="output-content"></div>
-            </div>
+      <div class="form-group">
+        <label class="form-label">01 Fuente del contenido</label>
+        <div class="radio-group">
+          <button class="radio-btn active" data-option="guion">Solo guion</button>
+          <button class="radio-btn" data-option="efemeride">Solo efeméride</button>
+          <button class="radio-btn" data-option="mixto">Guion + efeméride</button>
         </div>
+      </div>
+
+      <div class="form-group" id="guion-field">
+        <label class="form-label">Guion del podcast</label>
+        <textarea id="guion" placeholder="Pega aquí el guion..."></textarea>
+      </div>
+
+      <div class="form-group hidden" id="efemeride-field">
+        <label class="form-label">Efeméride o noticia</label>
+        <input type="text" id="efemeride" placeholder="Ej: Muerte de Perón, Invasión de Malvinas...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">02 Qué querés generar</label>
+        <div class="radio-group">
+          <button class="checkbox-btn active" data-generate="1video">1 video</button>
+          <button class="checkbox-btn" data-generate="3">3 videos</button>
+          <button class="checkbox-btn" data-generate="5">5 videos</button>
+          <button class="checkbox-btn" data-generate="carrusel">Carrusel IG</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Dificultad de edición</label>
+        <div class="difficulty-select">
+          <button class="diff-btn" data-difficulty="baja">Baja</button>
+          <button class="diff-btn active" data-difficulty="media">Media</button>
+          <button class="diff-btn" data-difficulty="alta">Alta</button>
+        </div>
+      </div>
+
+      <button class="submit-btn" onclick="generateContent()">Generar contenido</button>
     </div>
 
-    <script>
-        let selectedDifficulty = 'media';
-        document.querySelectorAll('input[name="option"]').forEach(r => {
-            r.addEventListener('change', (e) => {
-                document.getElementById('guion-field').classList.toggle('hidden', e.target.value === 'efemeride');
-                document.getElementById('efemeride-field').classList.toggle('hidden', e.target.value === 'guion');
-            });
-        });
-        document.querySelectorAll('.difficulty-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                selectedDifficulty = e.target.dataset.difficulty;
-            });
-        });
-        async function generateContent() {
-            const guion = document.getElementById('guion').value.trim();
-            const efemeride = document.getElementById('efemeride').value.trim();
-            if (!guion && !efemeride) { alert('Pegá un guion o efeméride'); return; }
-            const tipo = document.querySelector('input[name="option"]:checked').value;
-            const generar = Array.from(document.querySelectorAll('input[name="generate"]:checked')).map(x => x.value);
-            if (generar.length === 0) { alert('Elegí qué generar'); return; }
-            const output = document.getElementById('output');
-            output.style.display = 'block';
-            document.getElementById('output-content').innerHTML = '<div class="loading">Generando...</div>';
-            try {
-                const res = await fetch('/api/generate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ guion, efemeride, tipo, generar: generar.join(', '), dificultad: selectedDifficulty })
-                });
-                const data = await res.json();
-                document.getElementById('output-content').innerHTML = data.content || `<div class="info-box">Error: ${data.error}</div>`;
-            } catch (e) {
-                document.getElementById('output-content').innerHTML = `<div>Error: ${e.message}</div>`;
-            }
-        }
-    </script>
+    <!-- RESULT -->
+    <div class="result-col">
+      <h2 class="result-title">Contenido Generado</h2>
+      <div id="result-content" class="result-content">
+        <div class="loading">Espera a que generes contenido...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedOption = 'guion';
+let selectedGenerate = '1video';
+let selectedDifficulty = 'media';
+
+// Option buttons
+document.querySelectorAll('[data-option]').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    document.querySelectorAll('[data-option]').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    selectedOption = e.target.dataset.option;
+
+    document.getElementById('guion-field').classList.toggle('hidden', selectedOption !== 'guion' && selectedOption !== 'mixto');
+    document.getElementById('efemeride-field').classList.toggle('hidden', selectedOption !== 'efemeride' && selectedOption !== 'mixto');
+  });
+});
+
+// Generate buttons
+document.querySelectorAll('[data-generate]').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    document.querySelectorAll('[data-generate]').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    selectedGenerate = e.target.dataset.generate;
+  });
+});
+
+// Difficulty buttons
+document.querySelectorAll('[data-difficulty]').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    document.querySelectorAll('[data-difficulty]').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    selectedDifficulty = e.target.dataset.difficulty;
+  });
+});
+
+async function generateContent() {
+  const guion = document.getElementById('guion').value.trim();
+  const efemeride = document.getElementById('efemeride').value.trim();
+
+  if (!guion && !efemeride) {
+    alert('Pegá un guion o efeméride');
+    return;
+  }
+
+  const resultContent = document.getElementById('result-content');
+  resultContent.innerHTML = '<div class="loading"><div class="spinner"></div><p>Generando contenido...</p></div>';
+
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        guion,
+        efemeride,
+        tipo: selectedOption,
+        generar: selectedGenerate,
+        dificultad: selectedDifficulty
+      })
+    });
+
+    const data = await res.json();
+    resultContent.innerHTML = data.content || `<div style="color:red;">Error: ${data.error}</div>`;
+  } catch (e) {
+    resultContent.innerHTML = `<div style="color:red;">Error: ${e.message}</div>`;
+  }
+}
+</script>
 </body>
 </html>
